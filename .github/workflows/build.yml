@@ -1,4 +1,4 @@
-name: Build APK
+name: Build Neggaza APK
 on:
   push:
   workflow_dispatch:
@@ -10,7 +10,8 @@ jobs:
 
       - name: Unzip project
         run: |
-          ZIP=$(ls *.zip | head -n1)
+          if [ -f Neggaza.zip ]; then ZIP=Neggaza.zip; else ZIP=$(ls *.zip | head -n1); fi
+          echo "Using: $ZIP"
           unzip -q "$ZIP" -d project
           DIR=$(dirname "$(find project -name settings.gradle.kts | head -n1)")
           echo "PROJ=$DIR" >> $GITHUB_ENV
@@ -34,5 +35,5 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-          name: JumpBot-apk
+          name: Neggaza-apk
           path: ${{ env.PROJ }}/app/build/outputs/apk/debug/app-debug.apk
